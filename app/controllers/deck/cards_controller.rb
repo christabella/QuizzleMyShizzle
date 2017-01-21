@@ -9,7 +9,7 @@ class Deck::CardsController < ApplicationController
 
   def show
     @card = find_card
-    Speech.new("What is the capital of #{@card.question}").speak
+    Speech.new(@card.question).speak
   end
 
   def speech_command
