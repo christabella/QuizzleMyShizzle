@@ -1,0 +1,14 @@
+body.pages.index {
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .btn {
+      margin: 20px;
+    }
+  }
+
+}
