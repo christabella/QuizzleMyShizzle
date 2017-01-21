@@ -1,0 +1,18 @@
+body.deck_cards.show {
+
+  .card {
+    display: flex;
+    justify-content: center;
+    border-radius: 3px;
+    padding: 20px;
+    margin: 50px auto;
+    width: 50%;
+
+    color: white;
+    background-color: $brand-primary;
+
+    h1 {
+      margin: 0;
+    }
+  }
+}

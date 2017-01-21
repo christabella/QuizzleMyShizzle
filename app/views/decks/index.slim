@@ -1,5 +1,14 @@
 .container
   .col-md-12
     h1 Decks
-    - @decks.each do |deck|
-      = link_to deck.name , deck_cards_path(deck)
+    table.table.table-striped
+      thead
+        tr
+          th Name
+      tbody
+        - @decks.each do |deck|
+          tr
+            td = link_to deck.name , deck_cards_path(deck)
+            td
+              = link_to deck_path(deck) do
+                button.btn.btn-success Start Quiz
