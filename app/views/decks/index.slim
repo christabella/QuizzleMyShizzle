@@ -11,5 +11,8 @@
           tr
             td = link_to deck.name , deck_cards_path(deck)
             td
+              | Cards:
+              =< deck.cards.count
+            td
               = link_to deck_path(deck) do
                 button.btn.btn-success Start Quiz

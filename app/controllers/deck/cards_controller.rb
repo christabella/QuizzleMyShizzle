@@ -10,9 +10,6 @@ class Deck::CardsController < ApplicationController
   end
 
   def speech_command
-    # require 'wavefile'
-    # include WaveFile
-
     wavfile = params[:file]
     require 'googleauth'
     scopes =  ['https://www.googleapis.com/auth/cloud-platform']
@@ -20,23 +17,27 @@ class Deck::CardsController < ApplicationController
 
 
     require "google/cloud/speech"
-    
+
     speech = Google::Cloud::Speech.new
-    
-    new_file = File.open("testing.wav", mode="wb+")
 
-    new_file.write(wavfile.read)
+    tmp = File.open('testing.wav', 'wb+')
+    tmp.write(wavfile.read)
 
-    audio = speech.audio "testing.wav",
+    begin
+      audio = speech.audio 'testing.wav',
                          encoding: :linear16, sample_rate: 44100
 
-    results = audio.recognize
-    
-    result = results.first
-    raise result.inspect
-    puts result.transcript #=> "how old is the Brooklyn Bridge"
-    result.confidence #=> 0.9826789498329163
+    rescue Google::Cloud::UnavailableError
+      redirect_to deck_card_path(@deck, params[:id])
+    end
 
+    results = audio.recognize
+    result = results.first
+    if result.transcript == find_card.question.downcase
+      redirect_to deck_card_path(@deck, next_card_id)
+    else
+      redirect_to deck_card_path(@deck, params[:id])
+    end
 
   end
 
@@ -48,6 +49,10 @@ class Deck::CardsController < ApplicationController
 
   def find_card
     @deck.cards.find(params[:id])
+  end
+
+  def next_card_id
+    params[:id].to_i + 1
   end
 
 end

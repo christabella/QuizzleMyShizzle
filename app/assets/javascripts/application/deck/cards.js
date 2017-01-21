@@ -1,4 +1,5 @@
-$(document).on("ready page:load", function() {
+$(document).on("ready turbolinks:load", function() {
+  console.log("starting");
     var recorder;
     var audio_context;
 
@@ -6,7 +7,8 @@ $(document).on("ready page:load", function() {
       var fd = new FormData();
       fd.append('file', blob);
       var deckId = window.location.pathname.match(/decks\/([0-9]*)/)[1];
-      var urlString = "/decks/" + deckId + "/cards/speech_command"
+      var cardId = window.location.pathname.match(/cards\/([0-9]*)/)[1];
+      var urlString = "/decks/" + deckId + "/cards/" + cardId + "/speech_command"
 
       $.ajax({
         url: urlString,
@@ -36,7 +38,7 @@ $(document).on("ready page:load", function() {
     };
 
     var onSuccess = function(s) {
-        var context = new AudioContext(sampleRate = 16000);
+        var context = new AudioContext();
         var mediaStreamSource = context.createMediaStreamSource(s);
         recorder = new Recorder(mediaStreamSource, {
             bufferLen: 4096,
@@ -48,10 +50,11 @@ $(document).on("ready page:load", function() {
     }
 
     function startRecording() {
-        if (navigator.getUserMedia) {
+        var match = window.location.pathname.match(/decks\/([0-9]*)/);
+        if (navigator.getUserMedia && match) {
             navigator.getUserMedia({audio: true}, onSuccess, onFail);
         } else {
-            console.log('navigator.getUserMedia not present');
+            console.log('not recording');
         }
     }
 
@@ -65,4 +68,4 @@ $(document).on("ready page:load", function() {
     }
     startRecording();
     // $('#button').click(startRecording);
-});    
+});

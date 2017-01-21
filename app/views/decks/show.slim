@@ -5,4 +5,6 @@
       small
         | Cards: #{@deck.cards.count}
 
-    p Say 'start' into your microphone when you're ready.
+    - if @deck.cards.count > 0
+      = link_to deck_card_path(@deck, @deck.cards.first)
+        button.btn.btn-success Start Quiz
