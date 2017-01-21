@@ -33,7 +33,8 @@ class Deck::CardsController < ApplicationController
 
     results = audio.recognize
     result = results.first
-    if result.transcript == find_card.question.downcase
+    puts result.transcript.inspect
+    if result&.transcript.downcase == find_card.question.downcase
       redirect_to deck_card_path(@deck, next_card_id)
     else
       redirect_to deck_card_path(@deck, params[:id])
