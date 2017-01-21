@@ -38,8 +38,10 @@ class Deck::CardsController < ApplicationController
     result = results.first
     puts result.transcript.inspect
     if result&.transcript.downcase.include? find_card.question.downcase
+      Speech.new("Correct!").speak
       redirect_to deck_card_path(@deck, next_card_id)
     else
+      Speech.new("Try again!").speak
       redirect_to deck_card_path(@deck, params[:id])
     end
 
