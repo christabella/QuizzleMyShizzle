@@ -34,4 +34,14 @@ class DecksController < ApplicationController
     # result.confidence #=> 0.9826789498329163
   end
 
+  def show
+    @deck = find_deck
+  end
+
+  private
+
+  def find_deck
+    Deck.find(params[:id])
+  end
+
 end

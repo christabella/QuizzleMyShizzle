@@ -17,6 +17,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'repetition'
 gem 'simple_form'
+gem 'recorderjs-rails'
 
 gem 'google-cloud-speech'
 gem 'googleauth'
