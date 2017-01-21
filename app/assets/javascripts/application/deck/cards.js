@@ -14,7 +14,7 @@ $(document).on("ready page:load", function() {
         data: fd,
         processData: false,
         contentType : false,
-        sucess: function(data) {
+        success: function(data) {
             console.log("Successfully posted wav");
         },
         error: function(e) {
@@ -36,9 +36,13 @@ $(document).on("ready page:load", function() {
     };
 
     var onSuccess = function(s) {
-        var context = new AudioContext();
+        var context = new AudioContext(sampleRate = 16000);
         var mediaStreamSource = context.createMediaStreamSource(s);
-        recorder = new Recorder(mediaStreamSource);
+        recorder = new Recorder(mediaStreamSource, {
+            bufferLen: 4096,
+            numChannels: 1,
+            mimeType: 'audio/wav'
+        });
         recorder.record();
         setTimeout(stopRecording, TIMEOUT);
     }
