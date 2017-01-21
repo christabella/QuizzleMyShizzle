@@ -59,6 +59,9 @@ GEM
     concurrent-ruby (1.0.4)
     debug_inspector (0.0.2)
     dotenv (2.1.2)
+    dotenv-rails (2.1.2)
+      dotenv (= 2.1.2)
+      railties (>= 3.2, < 5.1)
     erubis (2.7.0)
     execjs (2.7.0)
     faraday (0.11.0)
@@ -78,7 +81,7 @@ GEM
       googleauth (~> 0.5.1)
       grpc (~> 1.0)
       rly (~> 0.2.3)
-    google-protobuf (3.0.2-universal-darwin)
+    google-protobuf (3.0.2)
     googleapis-common-protos (1.3.4)
       google-protobuf (~> 3.0)
       grpc (~> 1.0)
@@ -90,7 +93,7 @@ GEM
       multi_json (~> 1.11)
       os (~> 0.9)
       signet (~> 0.7)
-    grpc (1.0.1-universal-darwin)
+    grpc (1.0.1)
       google-protobuf (~> 3.0.2)
       googleauth (~> 0.5.1)
     i18n (0.7.0)
@@ -157,8 +160,6 @@ GEM
     rainbow (2.2.1)
     rake (12.0.0)
     rdoc (4.3.0)
-    recorderjs-rails (1.0.1)
-      railties (>= 3.0, < 5.0)
     repetition (1.0.1)
     rly (0.2.3)
     rubocop (0.46.0)
@@ -227,14 +228,13 @@ DEPENDENCIES
   bootstrap-sass
   byebug
   coffee-rails (~> 4.1.0)
-  dotenv
+  dotenv-rails
   google-cloud-speech
   googleauth
   jbuilder (~> 2.0)
   jquery-rails
   pg
   rails (= 4.2.7.1)
-  recorderjs-rails
   repetition
   rubocop
   sass-rails (~> 5.0)
