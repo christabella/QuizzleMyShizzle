@@ -36,12 +36,14 @@ class Deck::CardsController < ApplicationController
 
     results = audio.recognize
     result = results.first
-    puts result.transcript.inspect
-    if result&.transcript.downcase.include? find_card.question.downcase
-      Speech.new("Correct!").speak
+    if result&.transcript&.downcase&.include? find_card.question.downcase
+      puts result.transcript.inspect
+      congratulatory_msg = ["Correct!", "Nice.", "Go get 'em, Tiger!", "Booyah!", "Aww yeah...", "You go, girl!"].sample
+      Speech.new(congratulatory_msg).speak
       redirect_to deck_card_path(@deck, next_card_id)
     else
-      Speech.new("Try again!").speak
+      encouraging_msg = ["Try again!", "Not quite...", "Ahaha... Good one. Almost.", "Close, but no cigar."].sample
+      Speech.new(encouraging_msg).speak
       redirect_to deck_card_path(@deck, params[:id])
     end
 
