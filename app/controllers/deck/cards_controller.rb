@@ -1,4 +1,6 @@
+require 'espeak'
 class Deck::CardsController < ApplicationController
+  include ESpeak
 
   before_action :prepare_deck
 
@@ -7,6 +9,7 @@ class Deck::CardsController < ApplicationController
 
   def show
     @card = find_card
+    Speech.new("What is the capital of #{@card.question}").speak
   end
 
   def speech_command

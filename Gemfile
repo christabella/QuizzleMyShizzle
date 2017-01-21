@@ -21,7 +21,7 @@ gem 'simple_form'
 gem 'google-cloud-speech'
 gem 'googleauth'
 
-gem 'wavefile'
+gem 'espeak-ruby'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
