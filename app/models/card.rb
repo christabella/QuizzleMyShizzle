@@ -1,4 +1,4 @@
-class Card < ActiveRecord::Base
+chabclass Card < ActiveRecord::Base
   include Repetition
 
   belongs_to :deck
