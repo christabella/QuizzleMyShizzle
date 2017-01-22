@@ -1,0 +1,4 @@
+console.log("Rendering js.erb");
+console.log("url = <%= escape_javascript @url %>");
+$('.card').css('background-color', '#5cb85c');
+window.location.replace("<%= escape_javascript @url %>");

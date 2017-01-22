@@ -52,6 +52,7 @@ $(document).on("ready turbolinks:load", function() {
     function startRecording() {
         var match = window.location.pathname.match(/decks\/([0-9]*)/);
         if (navigator.getUserMedia && match) {
+            console.log("Recording");
             navigator.getUserMedia({audio: true}, onSuccess, onFail);
         } else {
             console.log('not recording');
