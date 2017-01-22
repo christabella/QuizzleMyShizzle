@@ -1,5 +1,8 @@
+require 'espeak'
+require 'amatch'
 class Deck::CardsController < ApplicationController
-  include ::ESpeak
+  include ESpeak
+  include Amatch
 
   before_action :prepare_deck
 
@@ -8,11 +11,7 @@ class Deck::CardsController < ApplicationController
 
   def show
     @card = find_card
-    speech = Speech.new("Hello!")
-    speech.speak # invokes espeak
-    respond_to do |format|
-        format.js {render layout: false}
-    end
+    Speech.new(@card.question).speak
   end
 
   def speech_command
@@ -40,6 +39,7 @@ class Deck::CardsController < ApplicationController
 
     results = audio.recognize
     result = results.first
+<<<<<<< HEAD
     puts result.transcript.inspect
     @path = deck_card_path(@deck, next_card_id)
     if result&.transcript.downcase == find_card.question.downcase
@@ -47,7 +47,21 @@ class Deck::CardsController < ApplicationController
         format.js {render layout: false}
       end
       puts "correct answer"
+=======
+    #if result&.transcript&.downcase&.include? find_card.question.downcase
+    if result && check_ans(result.transcript, find_card.answer)
+      puts result.transcript.inspect
+      congratulatory_msg = ["Correct!", "Nice.", "Go get 'em, Tiger!", "Booyah!", "Aww yeah...", "You go, girl!"].sample
+      Speech.new(congratulatory_msg).speak
+      redirect_to deck_card_path(@deck, next_card_id)
+>>>>>>> ce6ec769ba304354cf99bb46194ad5344fb302d1
     else
+      if result
+        encouraging_msg = ["Try again!", "Not quite...", "Ahaha... Good one. Almost.", "Close, but no cigar."].sample
+        Speech.new(encouraging_msg).speak
+      else 
+        Speech.new("Didn't hear you properly. Try again!").speak
+      end
       redirect_to deck_card_path(@deck, params[:id])
     end
 
@@ -65,6 +79,14 @@ class Deck::CardsController < ApplicationController
 
   def next_card_id
     params[:id].to_i + 1
+  end
+
+  def check_ans(string1, string2)
+    puts(string1, string2)
+    threshold = 0.5
+    val = string1.levenshtein_similar(string2)
+    puts val
+    return val > threshold
   end
 
 end

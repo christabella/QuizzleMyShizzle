@@ -21,8 +21,9 @@ gem 'simple_form'
 gem 'google-cloud-speech'
 gem 'googleauth'
 
-gem 'wavefile'
-gem 'espeak-ruby', require: 'espeak'
+gem 'espeak-ruby'
+
+gem 'amatch'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
