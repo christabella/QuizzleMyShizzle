@@ -1,4 +1,5 @@
 require 'espeak'
+require 'similar_text'
 class Deck::CardsController < ApplicationController
   include ESpeak
 
@@ -18,7 +19,6 @@ class Deck::CardsController < ApplicationController
     scopes =  ['https://www.googleapis.com/auth/cloud-platform']
     authorization = Google::Auth.get_application_default(scopes)
 
-
     require "google/cloud/speech"
 
     speech = Google::Cloud::Speech.new
@@ -29,19 +29,20 @@ class Deck::CardsController < ApplicationController
     begin
       audio = speech.audio 'testing.wav',
                          encoding: :linear16, sample_rate: 44100
-
-    rescue Google::Cloud::UnavailableError
+      results = audio.recognize
+    rescue Google::Cloud::Error
       redirect_to deck_card_path(@deck, params[:id])
     end
 
-    results = audio.recognize
     result = results.first
-    puts result.transcript.inspect
-    if result&.transcript.downcase == find_card.question.downcase
-      redirect_to deck_card_path(@deck, next_card_id)
+
+    if result && result.transcript.downcase.similar(find_card.answer.downcase) > 0.6
+      puts result.transcript.inspect
+      puts result.transcript.downcase.similar(find_card.answer.downcase)
+      @url = deck_card_path(@deck, next_card_id)
+      render layout: false
     else
-      redirect_to deck_card_path(@deck, params[:id])
-    end
+      redirect_to deck_card_path(@deck, params[:id]) end
 
   end
 
