@@ -71,8 +71,10 @@ class Deck::CardsController < ApplicationController
   end
 
   def check_ans(string1, string2)
+    puts(string1, string2)
     threshold = 0.5
     val = string1.levenshtein_similar(string2)
+    puts val
     return val > threshold
   end
 
