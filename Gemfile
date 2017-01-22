@@ -22,8 +22,6 @@ gem 'google-cloud-speech'
 gem 'googleauth'
 
 gem 'espeak-ruby'
-gem 'similar_text'
-
 gem 'amatch'
 
 group :development, :test do
