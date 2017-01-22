@@ -37,6 +37,10 @@ class Deck::CardsController < ApplicationController
     end
 
     @card = find_card
+    sorted = @deck.cards.order("next_repetition DESC")
+    index = sorted.index(@card)
+    next_id = sorted[index+1].id
+
 
     result = results&.first
     if result && check_ans(result.transcript, find_card.answer)
@@ -44,7 +48,7 @@ class Deck::CardsController < ApplicationController
       puts result.transcript.inspect
       congratulatory_msg = ["Correct!", "Nice.", "Go get 'em, Tiger!", "Booyah!", "Aww yeah...", "You go, girl!"].sample
       Speech.new(congratulatory_msg).speak
-      @url = deck_card_path(@deck, next_card_id)
+      @url = deck_card_path(@deck, next_id)
       render layout: false
     else
 
