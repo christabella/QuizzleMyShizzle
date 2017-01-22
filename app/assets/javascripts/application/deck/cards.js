@@ -32,13 +32,13 @@ $(document).on("ready turbolinks:load", function() {
     var recorder;
     var audio = document.querySelector('audio');
     var TIMEOUT = 5000; //milliseconds
+    var context = new AudioContext();
 
     var onFail = function(e) {
         console.log('Rejected!', e);
     };
 
     var onSuccess = function(s) {
-        var context = new AudioContext();
         var mediaStreamSource = context.createMediaStreamSource(s);
         recorder = new Recorder(mediaStreamSource, {
             bufferLen: 4096,
@@ -66,6 +66,7 @@ $(document).on("ready turbolinks:load", function() {
             console.log(s);
             sendWaveToPost(s);
         });
+        context.close();
     }
     startRecording();
     // $('#button').click(startRecording);

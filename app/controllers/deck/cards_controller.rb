@@ -1,7 +1,8 @@
 require 'espeak'
-require 'similar_text'
+require 'amatch'
 class Deck::CardsController < ApplicationController
   include ESpeak
+  include Amatch
 
   before_action :prepare_deck
 
@@ -10,7 +11,7 @@ class Deck::CardsController < ApplicationController
 
   def show
     @card = find_card
-    Speech.new("What is the capital of #{@card.question}").speak
+    Speech.new(@card.question).speak
   end
 
   def speech_command
@@ -31,19 +32,26 @@ class Deck::CardsController < ApplicationController
                          encoding: :linear16, sample_rate: 44100
       results = audio.recognize
     rescue Google::Cloud::Error
+      Speech.new("Didn't hear you properly. Try again!").speak
       redirect_to deck_card_path(@deck, params[:id])
     end
 
-    result = results.first
-
-    if result && result.transcript.downcase.similar(find_card.answer.downcase) > 0.6
+    result = results&.first
+    if result && check_ans(result.transcript, find_card.answer)
       puts result.transcript.inspect
-      puts result.transcript.downcase.similar(find_card.answer.downcase)
+      congratulatory_msg = ["Correct!", "Nice.", "Go get 'em, Tiger!", "Booyah!", "Aww yeah...", "You go, girl!"].sample
+      Speech.new(congratulatory_msg).speak
       @url = deck_card_path(@deck, next_card_id)
       render layout: false
     else
-      redirect_to deck_card_path(@deck, params[:id]) end
-
+      if result
+        encouraging_msg = ["Try again!", "Not quite...", "Ahaha... Good one. Almost.", "Close, but no cigar."].sample
+        Speech.new(encouraging_msg).speak
+      else
+        Speech.new("Didn't hear you properly. Try again!").speak
+      end
+      redirect_to deck_card_path(@deck, params[:id])
+    end
   end
 
   private
@@ -58,6 +66,14 @@ class Deck::CardsController < ApplicationController
 
   def next_card_id
     params[:id].to_i + 1
+  end
+
+  def check_ans(string1, string2)
+    puts(string1, string2)
+    threshold = 0.5
+    val = string1.levenshtein_similar(string2)
+    puts val
+    return val > threshold
   end
 
 end
