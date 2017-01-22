@@ -63,6 +63,7 @@ GEM
       dotenv (= 2.1.2)
       railties (>= 3.2, < 5.1)
     erubis (2.7.0)
+    espeak-ruby (1.0.3)
     execjs (2.7.0)
     faraday (0.11.0)
       multipart-post (>= 1.2, < 3)
@@ -230,6 +231,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   dotenv-rails
+  espeak-ruby
   google-cloud-speech
   googleauth
   jbuilder (~> 2.0)

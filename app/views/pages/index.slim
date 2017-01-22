@@ -1,9 +1,10 @@
 .container
-  .col-md-12.buttons
+  .col-md-12.buttons.form-group
     = form_tag({action: 'upload'}, multipart: true) do
-      = label_tag 'Name'
-      = text_field_tag 'name'
-      = file_field_tag 'deck'
+      .form-control
+        = label_tag 'Name'
+        = text_field_tag 'name'
+      = file_field_tag 'deck', class: 'btn btn-default btn-file'
       = submit_tag 'Upload Deck', class: 'btn btn-info'
-    = link_to decks_path do
-      button.btn.btn-primary View Decks
+      = link_to decks_path do
+        button.btn.btn-primary View Decks

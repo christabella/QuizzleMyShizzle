@@ -1,4 +1,5 @@
 class Deck::CardsController < ApplicationController
+  include ::ESpeak
 
   before_action :prepare_deck
 
@@ -7,9 +8,15 @@ class Deck::CardsController < ApplicationController
 
   def show
     @card = find_card
+    speech = Speech.new("Hello!")
+    speech.speak # invokes espeak
+    respond_to do |format|
+        format.js {render layout: false}
+    end
   end
 
   def speech_command
+
     wavfile = params[:file]
     require 'googleauth'
     scopes =  ['https://www.googleapis.com/auth/cloud-platform']
@@ -34,8 +41,12 @@ class Deck::CardsController < ApplicationController
     results = audio.recognize
     result = results.first
     puts result.transcript.inspect
+    @path = deck_card_path(@deck, next_card_id)
     if result&.transcript.downcase == find_card.question.downcase
-      redirect_to deck_card_path(@deck, next_card_id)
+      respond_to do |format|
+        format.js {render layout: false}
+      end
+      puts "correct answer"
     else
       redirect_to deck_card_path(@deck, params[:id])
     end
