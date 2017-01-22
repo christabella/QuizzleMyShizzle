@@ -1,4 +1,4 @@
-chabclass Card < ActiveRecord::Base
+class Card < ActiveRecord::Base
   include Repetition
   include ESpeak
 
