@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170121064724) do
+ActiveRecord::Schema.define(version: 20170122030428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 20170121064724) do
   create_table "cards", force: :cascade do |t|
     t.text     "question"
     t.text     "answer"
-    t.decimal  "easyness_factor"
-    t.integer  "number_of_repetitions"
+    t.decimal  "easiness_factor"
+    t.integer  "number_repetitions"
     t.integer  "quality_of_last_recall"
     t.datetime "next_repetition"
     t.decimal  "repetition_interval"

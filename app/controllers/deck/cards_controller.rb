@@ -36,15 +36,20 @@ class Deck::CardsController < ApplicationController
       redirect_to deck_card_path(@deck, params[:id])
     end
 
+    @card = find_card
+
     result = results&.first
     if result && check_ans(result.transcript, find_card.answer)
+      @card.process_recall_result(5)
       puts result.transcript.inspect
       congratulatory_msg = ["Correct!", "Nice.", "Go get 'em, Tiger!", "Booyah!", "Aww yeah...", "You go, girl!"].sample
       Speech.new(congratulatory_msg).speak
       @url = deck_card_path(@deck, next_card_id)
       render layout: false
     else
+
       if result
+        @card.process_recall_result(1)
         encouraging_msg = ["Try again!", "Not quite...", "Ahaha... Good one. Almost.", "Close, but no cigar."].sample
         Speech.new(encouraging_msg).speak
       else

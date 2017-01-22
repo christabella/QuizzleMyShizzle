@@ -7,7 +7,11 @@ class PagesController < ApplicationController
   def upload
     deck = Deck.create(name: deck_name)
     CSV.parse(params[:deck].read) do |row|
-      deck.cards << Card.create(card_params(row))
+      card = Card.new(card_params(row))
+      deck.cards << card
+      card.reset_spaced_repetition_data
+      card.process_recall_result(1)
+      card.save
     end
     redirect_to deck_cards_path(deck)
   end
