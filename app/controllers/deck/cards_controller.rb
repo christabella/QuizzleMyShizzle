@@ -1,6 +1,8 @@
 require 'espeak'
+require 'amatch'
 class Deck::CardsController < ApplicationController
   include ESpeak
+  include Amatch
 
   before_action :prepare_deck
 
@@ -36,14 +38,19 @@ class Deck::CardsController < ApplicationController
 
     results = audio.recognize
     result = results.first
-    if result&.transcript&.downcase&.include? find_card.question.downcase
+    #if result&.transcript&.downcase&.include? find_card.question.downcase
+    if result.transcript && check_ans(result.transcript, find_card.answer)
       puts result.transcript.inspect
       congratulatory_msg = ["Correct!", "Nice.", "Go get 'em, Tiger!", "Booyah!", "Aww yeah...", "You go, girl!"].sample
       Speech.new(congratulatory_msg).speak
       redirect_to deck_card_path(@deck, next_card_id)
     else
-      encouraging_msg = ["Try again!", "Not quite...", "Ahaha... Good one. Almost.", "Close, but no cigar."].sample
-      Speech.new(encouraging_msg).speak
+      if result.transcript
+        encouraging_msg = ["Try again!", "Not quite...", "Ahaha... Good one. Almost.", "Close, but no cigar."].sample
+        Speech.new(encouraging_msg).speak
+      else 
+        Speech.new("Didn't hear you properly. Try again!").speak
+      end
       redirect_to deck_card_path(@deck, params[:id])
     end
 
@@ -61,6 +68,13 @@ class Deck::CardsController < ApplicationController
 
   def next_card_id
     params[:id].to_i + 1
+  end
+
+  def check_ans string1 string2
+    THRESHOLD = 0.5
+    val = string1.levenshtein_similar(string2)
+    puts val
+    return val > THRESHOLD
   end
 
 end

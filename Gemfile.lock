@@ -38,6 +38,8 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
+    amatch (0.3.0)
+      tins (~> 1.0)
     arel (6.0.4)
     ast (2.3.0)
     autoprefixer-rails (6.6.1)
@@ -208,6 +210,7 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.5)
     tilt (2.0.5)
+    tins (1.13.0)
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.0)
@@ -226,6 +229,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  amatch
   bootstrap-sass
   byebug
   coffee-rails (~> 4.1.0)
